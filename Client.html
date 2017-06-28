@@ -1,0 +1,115 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="./css/main.css">
+	</head>
+	<body>
+		<div id="login_menu" class="menu">
+			<table>
+				<tr>
+					<td><span id="login_text">Login</span></td><td></td>
+				</tr>
+				<tr>
+					<td>Username:</td><td><input type="text" id="login_name"></td>
+				</tr>
+				<tr>
+					<td>Password:</td><td><input type="password" id="login_password"></td>
+				</tr>
+				<tr>
+					<td><button onclick="comm.login(document.getElementById('login_name').value,document.getElementById('login_password').value)">Submit</button></td>
+				</tr>
+				<tr>
+					<td><span id="signup_text">Signup</span></td><td></td>
+				</tr>
+				<tr>
+					<td>Username:</td><td><input type="text" id="signup_name"></td>
+				</tr>
+				<tr>
+					<td>Password:</td><td><input type="password" id="signup_password"></td>
+				</tr>
+				<tr>
+					<td><button onclick="">Submit</button></td>
+				</tr>
+			</table>
+		</div>
+		<div id="main_menu" class="menu">
+			<div id="resource_subdiv">
+				<table>
+					<tr>
+						<td>Metal:</td><td id="metal_display">0</td>
+					</tr>
+					<tr>
+						<td>Crystal:</td><td id="crystal_display">0</td>
+					</tr>
+					<tr>
+						<td>Gas:</td><td id="gas_display">0</td>
+					</tr>
+				</table>
+			</div>
+			<div id="buildings_display">
+				<div id="metal_mine" class="building_div" onclick="game.disp.menu.showBuilding('metal_mine')">
+					Metal Mine
+					<img src="./img/metal_mine.png">
+				</div>
+				<div class="building_div" onclick="game.disp.menu.showBuilding('crystal_mine')">
+					Crystal Mine
+					<img src="./img/crystal_mine.png">
+				</div>
+				<div class="building_div" onclick="game.disp.menu.showBuilding('gas_mine')">
+					Gas Mine
+					<img src="./img/gas_mine.png">
+				</div>
+				<div class="building_div" onclick="game.disp.menu.showBuilding('metal_storage')">
+					Metal Storage
+					<img src="./img/metal_storage.png">
+				</div>
+				<div class="building_div" onclick="game.disp.menu.showBuilding('crystal_storage')">
+					Crystal Storage
+				</div>
+				<div class="building_div" onclick="game.disp.menu.showBuilding('gas_storage')">
+					Gas Storage
+				</div>
+				<div class="building_div" onclick="game.disp.menu.showBuilding('shipyard')">
+					Shipyard
+				</div>
+			</div>
+			<div id="buttons_display">
+				<div class="button_div" onclick="game.disp.menu.showOnly('planets_menu')">
+					Planets
+				</div>
+				<div class="button_div">
+					Missions
+				</div>
+				<div class="button_div">
+					Ships
+				</div>
+			</div>
+		</div>
+		<div id="building_menu" class="menu">
+			
+		</div>
+		<div id="planets_menu" class="menu">
+			
+		</div>
+		<div id="shipyard_menu" class="menu">
+			<button onclick="game.disp.menu.showOnly('main_menu')">Close</button>
+			<div id="buildings_display">
+				<div id="ship_light_fighter" class="building_div">
+					Light Fighter
+				</div>
+				<div id="ship_heavy_fighter"  class="building_div">
+					Heavy Fighter
+				</div>
+				<div id="ship_colony"  class="building_div">
+					Colony Ship
+				</div>
+			</div>
+		</div>
+		<script src="./js/jquery-3.2.1.min.js"></script>
+		<script src="./js/lib/cl_web_socks.js"></script>
+		<script src="./js/lib/stack.js"></script>
+		<script src="./js/lib/strconv.js"></script>
+		<script src="./js/comm.js"></script>
+		<script src="./js/game.js"></script>
+	</body>
+</html>

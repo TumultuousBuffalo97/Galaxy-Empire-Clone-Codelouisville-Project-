@@ -1,0 +1,7 @@
+comm={
+	"CODE":{
+		"PLAYERSTATE":1,
+		"UPGRADE":2,
+		"CHANGEPLANETVIEW":3
+	}
+}
