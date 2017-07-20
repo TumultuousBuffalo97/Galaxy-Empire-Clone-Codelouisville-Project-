@@ -1,4 +1,4 @@
-the game is being hosted at http://nickasnow.tk
+the game is being hosted at http://nicksnow.tk
 
 This is a clone of the game galaxy empire.
 open Client.html, it should connect to ws://nicksnow.tk:1233, if the game doesnt seem to work, the server is probably not on.
