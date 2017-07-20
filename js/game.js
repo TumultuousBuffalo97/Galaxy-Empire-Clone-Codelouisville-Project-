@@ -97,7 +97,25 @@ game.disp.update_building_stats=function() {
 				document.getElementById("building_level").innerHTML=pldata.planet.rsbuildings[game.buildings[bname].id-3].level;
 				document.getElementById("upgrade_time_remaining").innerHTML=pldata.planet.rsbuildings[game.buildings[bname].id-3].upgradetime;
 			break;
+			case "build_speed_mult":
+				document.getElementById("building_level").innerHTML=pldata.planet.shipyard.level;
+				document.getElementById("upgrade_time_remaining").innerHTML=pldata.planet.shipyard.upgradetime;
+			break;
 		}
+	}
+}
+game.disp.build_time=function(time) {
+	if(time==0) {
+		document.getElementById("shp_t").innerHTML="Not building"
+	}
+	else {
+		document.getElementById("shp_t").innerHTML=time;
+	}
+}
+game.disp.ships=function (data) {//player.planet.ships object
+	inputs=document.querySelectorAll('input[name="mis_s"]');
+	for(i=0;i<comm.SHP.NUMTYPES;++i) {
+		inputs[i].placeholder=data[i];
 	}
 }
 game.disp.playerstate=function (data) {
@@ -108,29 +126,139 @@ game.disp.playerstate=function (data) {
 		elems[i].innerHTML=data.planet.resources[i]
 	}
 	game.disp.update_building_stats();
+	game.disp.build_time(data.planet.shipyard.buildtime);
+	game.disp.missions(data.missions);
+	game.disp.ships(data.planet.ships);
 }
 game.disp.ownedplanets=function (data) {
 	document.getElementById("planets_menu").innerHTML=`
 	<button onclick="game.disp.menu.showOnly('main_menu')">Close</button><div>
-	`
+	<span>Owned Planets</span>`
 	for(i=0;i<data.num;++i) {
 		document.getElementById("planets_menu").innerHTML+=`
-		<button onclick="comm.changeplanetview(${i})">${data.objs[0].g}:${data.objs[0].s}:${data.objs[0].p}</button>
+		<span>${data.objs[i].g}:${data.objs[i].s}:${data.objs[i].p} </span><button onclick="comm.changeplanetview(${i});game.disp.menu.showOnly('main_menu')">Switch To</button><br>
 		`
 	}
 	document.getElementById("planets_menu").innerHTML+=`</div>`
 	
 }
+game.disp.mission_type_to_string=function (type) {
+	switch(type) {
+		case 0:
+			return "Attack"
+		break;
+		case 1:
+			return "Colonize"
+		break;
+		case 3:
+			return "Transport"
+		break;
+	}
+}
+game.disp.travel_type_to_string=function (type) {
+	switch(type) {
+		case 0:
+			return "Arriving"
+		break;
+		case 1:
+			return "Returning"
+		break;
+	}
+}
+game.disp.missions=function(data) {//player.missions object
+	
+	var disp=document.getElementById("missions_disp");
+	if(data.nummissions==0) {
+		disp.innerHTML=""
+	}
+	var HTML=""
+	HTML=`
+	<table class="center">
+		<tr>
+			<td>Type</td><td>Status</td><td>Travel Time</td>
+		</tr>`;
+	for(i=0;i<data.nummissions;++i) {
+		HTML+=`
+		<tr>
+			<td>${game.disp.mission_type_to_string(data.objects[i].type)}</td><td>${game.disp.travel_type_to_string(data.objects[i].returning)}</td><td>${data.objects[i].traveltime}</td>
+		</tr>`;
+	}
+	HTML+=`
+	</table>
+	`
+	disp.innerHTML=HTML;
+}
+game.start_mission=function () {
+	//thank you guy on stackoverflow, this is a much better solution. I would have used a for loop to loop through ids
+	type=parseInt(document.querySelector('input[name="mis_m_t"]:checked').value);
+	//gave me the idea to do this
+	coords=[]
+	coordinputs=document.querySelectorAll('input[name="mis_c"]');
+	for(var i=0;i<coordinputs.length;++i) {
+		coords[i]=parseInt(coordinputs[i].value)
+	}
+	ships=[]
+	shipinputs=document.querySelectorAll('input[name="mis_s"]');
+	for(var i=0;i<shipinputs.length;++i) {
+		if(shipinputs[i].value=="") {
+			ships[i]=0;
+		}
+		else {
+			ships[i]=parseInt(shipinputs[i].value)
+			shipinputs[i].value=""
+		}
+	}
+	resources=[]
+	resourceinputs=document.querySelectorAll('input[name="mis_r"]')
+	for(var i=0;i<resourceinputs.length;++i) {
+		if(resourceinputs[i].value=="") {
+			resources[i]=0;
+		}
+		else {
+			resources[i]=parseInt(resourceinputs[i].value)
+			resourceinputs[i].value="0"
+		}
+	}
+	console.log(coords,ships,resources)
+	comm.startmission(type,ships,resources,coords[0],coords[1],coords[2]);
+}
+game.signup=function() {
+	name=document.getElementById("signup_name").value;
+	password=document.getElementById("signup_password").value;
+	comm.signup(name,password);
+}
+game.handlesuccsess=function (type) {
+	switch(type) {
+		case comm.SUCCSESS.LOGIN:
+			//display main menu
+			comm.getownedplanets()
+			game.disp.menu.showOnly("planets_menu");
+		break;
+		case comm.SUCCSESS.SIGNUP_INIT:
+			var coords=[];
+			var coordinputs=document.querySelectorAll('input[name="su_c"]');
+			for(var i=0;i<coordinputs.length;++i) {
+				coords[i]=parseInt(coordinputs[i].value)
+			}
+			comm.choosefirstplanet(coords[0],coords[1],coords[2]);
+		break;
+		case comm.SUCCSESS.SIGNUP:
+			//display main menu
+			comm.getownedplanets()
+			game.disp.menu.showOnly("planets_menu");
+		break;
+	}
+}
 game.init=function() {
 	document.getElementById("building_menu").innerHTML=""
-	ws.connect("ws://192.168.12.189:25565")
+	ws.connect("ws://nicksnow.tk:1233")
 	var stck=stack.init(comm.MAXMESSAGELENGTH)
 	ws.socket.onmessage=function (event) {
 		ws.read(stck,event);
 		console.log(stck.array[0])
 		switch(stck.array[0]) {
 			case comm.CODE.PLAYERSTATE:
-				console.log("Received player state")
+				//console.log("Received player state")
 				game.disp.playerstate(comm.readplayerstate(stck.array))
 			break;
 			case comm.CODE.OWNEDPLANETS:
@@ -142,8 +270,7 @@ game.init=function() {
 				game.display.systemstate(comm.readsystemstate(stck.array))
 			break;
 			case comm.CODE.SUCCSESS:
-				comm.getownedplanets()
-				game.disp.showOnly("planets_menu")
+				game.handlesuccsess(stck.array[1])
 			break;
 		}
 	}

@@ -10,26 +10,37 @@
 					<td><span id="login_text">Login</span></td><td></td>
 				</tr>
 				<tr>
-					<td>Username:</td><td><input type="text" id="login_name"></td>
+					<td>Username:</td><td><input type="text" id="login_name" size="6"></td>
 				</tr>
 				<tr>
-					<td>Password:</td><td><input type="password" id="login_password"></td>
+					<td>Password:</td><td><input type="password" id="login_password"  size="6"></td>
 				</tr>
 				<tr>
 					<td><button onclick="comm.login(document.getElementById('login_name').value,document.getElementById('login_password').value)">Submit</button></td>
 				</tr>
 				<tr>
-					<td><span id="signup_text">Signup</span></td><td></td>
+					<td colspan="3"><span id="signup_text"><hr>Signup</span></td><td></td>
 				</tr>
 				<tr>
-					<td>Username:</td><td><input type="text" id="signup_name"></td>
+					<td>Username:</td><td><input type="text" id="signup_name" size="6"></td>
 				</tr>
 				<tr>
-					<td>Password:</td><td><input type="password" id="signup_password"></td>
+					<td>Password:</td><td><input type="password" id="signup_password" size="6"></td>
 				</tr>
 				<tr>
-					<td><button onclick="">Submit</button></td>
+					<td colspan="3">Choose your homeworld</td>
 				</tr>
+				<tr>
+					<td colspan="3"><input type="text" size="3" name="su_c" id="su_c_0" placeholder="Galaxy"> : <input type="text" size="3" name="su_c" id="su_c_1" placeholder="System"> : <input type="text" size="3" name="su_c" id="su_c_2" placeholder="Planet"></td>
+				</tr>
+				<tr>
+					<td><button onclick="game.signup()">Submit</button></td>
+				</tr>
+			</table>
+		</div>
+		<div id="signup2_menu" class="menu">
+			<table>
+				
 			</table>
 		</div>
 		<div id="main_menu" class="menu">
@@ -77,10 +88,10 @@
 				<div class="button_div" onclick="game.disp.menu.showOnly('planets_menu')">
 					Planets
 				</div>
-				<div class="button_div">
-					Missions
+				<div class="button_div" onclick="game.disp.menu.showOnly('dispatch_menu')">
+					Fleet
 				</div>
-				<div class="button_div">
+				<div class="button_div" onclick="game.disp.menu.showOnly('ships_menu')">
 					Ships
 				</div>
 			</div>
@@ -91,19 +102,73 @@
 		<div id="planets_menu" class="menu">
 			
 		</div>
-		<div id="shipyard_menu" class="menu">
-			<button onclick="game.disp.menu.showOnly('main_menu')">Close</button>
-			<div id="buildings_display">
-				<div id="ship_light_fighter" class="building_div">
-					Light Fighter
-				</div>
-				<div id="ship_heavy_fighter"  class="building_div">
-					Heavy Fighter
-				</div>
-				<div id="ship_colony"  class="building_div">
-					Colony Ship
-				</div>
+		<div id="in_flight_menu" class="menu">
+			<button onclick="game.disp.menu.showOnly('main_menu')">Close</button> | <button onclick="game.disp.menu.showOnly('dispatch_menu')">Dispatch</button>
+			<div id="missions_disp">
+				
 			</div>
+		</div>
+		<div id="dispatch_menu" class="menu">
+			<button onclick="game.disp.menu.showOnly('main_menu')">Close</button> | <button onclick="game.disp.menu.showOnly('in_flight_menu')">In Flight</button>
+			<table>
+				<tr>
+					<td colspan="3" class="center">Mission Type</td>
+				</tr>
+				<tr>
+					<td colspan="2">Attack</td><td><input type="radio" name="mis_m_t" id="mis_m_t_0" value="0"></td>
+				</tr>
+				<tr>
+					<td colspan="2">Colonize</td><td><input type="radio" name="mis_m_t" id="mis_m_t_1" value="1"></td>
+				</tr>
+				<tr>
+					<td colspan="2">Transport</td><td><input type="radio" name="mis_m_t" id="mis_m_t_3" value="3"></td>
+				</tr>
+				<tr>
+					<td colspan="3" class="center"><hr>Destination</td>
+				</tr>
+				<tr>
+					<td><input id="mis_c_0" size="3" name="mis_c">:</td><td><input id="mis_c_1" size="3" name="mis_c">:</td><td><input id="mis_c_2" size="3" name="mis_c"></td>
+				</tr>
+				<tr>
+					<td colspan="3" class="center"><hr>Ships</td>
+				</tr>
+				<tr>
+					<td colspan="2">Light Fighter </td><td><input type="text" id="mis_s_0" name="mis_s" size="6"></td>
+				</tr>
+				<tr>
+					<td colspan="2">Heavy Fighter </td><td><input type="text" id="mis_s_1" name="mis_s" size="6"></td>
+				</tr>
+				<tr>
+					<td colspan="2">Colony Ship </td><td><input type="text" id="mis_s_2" name="mis_s" size="6"></td>
+				</tr>
+				<tr>
+					<td colspan="3" class="center"><hr>Resources</td>
+				</tr>
+				<tr>
+					<td colspan="2">Metal </td><td><input type="text" id="mis_r_0" name="mis_r" size="6"></td>
+				</tr>
+				<tr>
+					<td colspan="2">Crystal </td><td><input type="text" id="mis_r_1" name="mis_r" size="6"></td>
+				</tr>
+				<tr>
+					<td colspan="2">Gas </td><td><input type="text" id="mis_r_2" name="mis_r" size="6"></td>
+				</tr>
+			</table>
+			<button onclick="game.start_mission()">Start</button>
+		</div>
+		<div id="ships_menu" class="menu">
+			<button onclick="game.disp.menu.showOnly('main_menu')">Close</button> | Time until complete: <span id="shp_t"></span>
+			<table>
+				<tr id="shp_0">
+					<td>Light Fighter</td><td><input id="shp_b_0" name="ship_b" type="text" size="6"></td><td><button onclick="comm.buildships(parseInt(document.getElementById('shp_b_0').value),0)" id="shp_t_0">Build</button></td>
+				</tr>
+				<tr id="shp_1">
+					<td>Heavy Fighter</td><td><input id="shp_b_1" name="ship_b" type="text" size="6"></td><td><button onclick="comm.buildships(parseInt(document.getElementById('shp_b_1').value),1)" id="shp_t_1">Build</button></td>
+				</tr>
+				<tr id="shp_2">
+					<td>Colony Ship</td><td><input id="shp_b_2" name="ship_b" type="text" size="6"></td><td><button onclick="comm.buildships(parseInt(document.getElementById('shp_b_2').value),2)" id="shp_t_2">Build</button></td>
+				</tr>
+			</table>
 		</div>
 		<script src="./js/jquery-3.2.1.min.js"></script>
 		<script src="./js/lib/cl_web_socks.js"></script>

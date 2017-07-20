@@ -1,14 +1,23 @@
 #login_menu {
 	
 }
+#signup2_menu {
+	display:none;
+}
 #main_menu {
 	display:none;
 }
-#shipyard_menu {
+#ships_menu {
 	display:none;
 }
 #resource_subdiv {
 	border: 2px solid black
+}
+#in_flight_menu {
+	display:none;
+}
+#dispatch_menu {
+	display:none;
 }
 #buildings_display {
 	display:flex;
@@ -39,4 +48,7 @@
 	height: 50px;
 	border: 2px solid black;
 	margin: 2px 2px;
+}
+.center {
+	text-align:center;
 }
