@@ -118,7 +118,7 @@ game.disp.ships=function (data) {//player.planet.ships object
 		inputs[i].placeholder=data[i];
 	}
 }
-game.disp.playerstate=function (data) {
+game.disp.playerstate=function (data) {//update the displays using the data recieved from the server
 	pldata=data
 	//update the resource amounts
 	var elems=$("#resource_subdiv [id]");
@@ -142,7 +142,7 @@ game.disp.ownedplanets=function (data) {
 	document.getElementById("planets_menu").innerHTML+=`</div>`
 	
 }
-game.disp.mission_type_to_string=function (type) {
+game.disp.mission_type_to_string=function (type) {//just int to string conversion, I just realized I could have used a simple array for this
 	switch(type) {
 		case 0:
 			return "Attack"
@@ -155,7 +155,7 @@ game.disp.mission_type_to_string=function (type) {
 		break;
 	}
 }
-game.disp.travel_type_to_string=function (type) {
+game.disp.travel_type_to_string=function (type) {//same here
 	switch(type) {
 		case 0:
 			return "Arriving"
